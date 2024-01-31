@@ -1,0 +1,21 @@
+# Use an official Python runtime as a parent image
+FROM python:3.11
+
+# Set environment variables
+ENV FLASK_APP flaskapi.py
+ENV FLASK_RUN_HOST 0.0.0.0
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the current directory contents into the container
+COPY ./backend /app
+
+# Install any needed packages specified in requirements.txt
+RUN pip install -r requirements.txt
+RUN pip install SQLAlchemy Flask-SQLAlchemy
+# Expose the port
+EXPOSE 5001
+
+# Run app.py when the container launches
+CMD ["flask", "run"]

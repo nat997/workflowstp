@@ -15,7 +15,7 @@ COPY ./backend /app
 RUN pip install -r requirements.txt
 RUN pip install SQLAlchemy Flask-SQLAlchemy
 # Expose the port
-EXPOSE 5001
+EXPOSE 5000
 
 # Run app.py when the container launches
 CMD ["flask", "run"]

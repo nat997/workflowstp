@@ -21,21 +21,28 @@ print(f"password: {password}")
 # Define the cursor variable outside of the try block
 cursor = None
 
-try:
-    db_connection = connect(
-        host="mysql",
-        user="root",
-        port=3306,
-        password="root",
-        database="labdata"
-    )
-    print("Database connection successful")  # Add this print statement
+# Attempt to connect using various host options
+hosts_to_try = ["172.24.0.2", "172.24.0.3", "localhost", "mysql", "127.0.0.1", "0.0.0.0"]
 
-    # Create a cursor for executing SQL queries
-    cursor = db_connection.cursor()
+for host_to_try in hosts_to_try:
+    try:
+        db_connection = connect(
+            host=host_to_try,
+            user="root",
+            port=3306,
+            password="root",
+            database="labdata"
+        )
+        print(f"Database connection successful using host: {host_to_try}")
+        print(cursor)  # Print the cursor object itself
+        cursor = db_connection.cursor()
+        break  # Exit the loop if a successful connection is made
 
-except Exception as e:
-    print(f"Database connection error: {str(e)}")  # Add this print statement
+    except Exception as e:
+        print(f"Database connection error using host {host_to_try}: {str(e)}")
+
+if cursor is None:
+    print("Unable to establish a connection to the database.")
 
 @app.route('/degree', methods=['GET'])
 def get_degrees():
@@ -46,7 +53,7 @@ def get_degrees():
         print(degree_data)
         return jsonify(degree_data), 200
     except Exception as e:
-        print(f"Error fetching degree data: {str(e)}")  # Add this print statement
+        print(f"Error fetching degree data: {str(e)}") 
         return jsonify({'error': 'Internal Server Error', 'message': str(e)}), 500
 
 @app.route('/timestamp', methods=['GET'])
@@ -58,8 +65,8 @@ def get_timestamps():
         print(timestamp_data)
         return jsonify(timestamp_data), 200
     except Exception as e:
-        print(f"Error fetching timestamp data: {str(e)}")  # Add this print statement
+        print(f"Error fetching timestamp data: {str(e)}") 
         return jsonify({'error': 'Internal Server Error', 'message': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host='0.0.0.0', port=5000)

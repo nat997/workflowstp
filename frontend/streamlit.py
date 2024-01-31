@@ -3,8 +3,8 @@ import pandas as pd
 import requests
 
 # Define the Flask API endpoints
-degree_api_url = "http://backend:5001/degree"
-timestamp_api_url = "http://backend:5001/timestamp"
+degree_api_url = "http://localhost:5000/degree"
+timestamp_api_url = "http://localhost:5000/timestamp"
 
 # Fetch data from the API
 degree_data = requests.get(degree_api_url).json()
